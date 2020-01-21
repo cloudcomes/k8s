@@ -1,4 +1,4 @@
-# Cobra & pflag & Opthions
+# Cobra & pflag & Options
 
 ###  Initialize the modules.
 ```
