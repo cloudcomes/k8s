@@ -1,51 +1,15 @@
-# Cobra & pflag & Opthions
+# Cobra & pflag & Options
+Demonstration of how to use the pflag, Cobra and Options library to build a functional k8s.io/apiserver API server.
 
-###  Initialize the modules.
+###  Clone Project.
 ```
-$ go mod init cloudcome.net
-```
-
-### Initialize the cli scaffolding 
-```
-$ cobra init k8s-options --pkg-name cloudcome.net/k8s-options
+$ https://github.com/cloudcomes/k8s.git
 ```
 
-###  Add Options
-   >serving.go: HTTPS configuration    
-   >options.go: contains flags and options for initializing an apiserver    
-   >sectioned.go: define named flag sets      
-
-###  Add NewAPIServerCommand() in root.go   
-
-
+### Go to k8s-options folder 
 ```
-func NewAPIServerCommand() *cobra.Command {
-  s := options.NewServerRunOptions()
-  cmd := &cobra.Command{
-    Use: "k8s-options",
-    Long: `The Kubernetes API server validates and configures data
-for the api objects which include pods, services, replicationcontrollers, and
-others. The API Server services REST operations and provides the frontend to the
-cluster's shared state through which all other components interact.`,
-    RunE: func(cmd *cobra.Command, args []string) error {
-      fmt.Println("Hello CLI")
-      //fmt.Println()
-
-      return nil
-    },
-  }
-
-  fs := cmd.Flags()
-  namedFlagSets := s.Flags()
-  for _, f := range namedFlagSets.FlagSets {
-    fs.AddFlagSet(f)
-  }
-
-  return cmd
-}
-
+$ cd k8s-options
 ```
-
 
 ### Build cli Application
 
@@ -56,6 +20,7 @@ $ go build .
 ### Run cli Application
 
 ```
-$ ./k8s-options -h
+$ ./k8s-options --apiserver-count 10
 ```
-
+>Hello CLI
+>10

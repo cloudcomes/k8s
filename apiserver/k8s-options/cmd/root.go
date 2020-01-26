@@ -42,7 +42,9 @@ cluster's shared state through which all other components interact.`,
     RunE: func(cmd *cobra.Command, args []string) error {
       fmt.Println("Hello CLI")
       //fmt.Println()
-
+      //fmt.Print(os.Args[1:])
+      fmt.Print(s.MasterCount)
+      fmt.Print(s.SecureServing.BindPort)
       return nil
     },
   }
@@ -51,7 +53,10 @@ cluster's shared state through which all other components interact.`,
   namedFlagSets := s.Flags()
   for _, f := range namedFlagSets.FlagSets {
     fs.AddFlagSet(f)
+
   }
+
+
 
   return cmd
 }

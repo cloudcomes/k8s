@@ -28,8 +28,7 @@ type SecureServingOptions struct {
 	BindAddress net.IP
 	// BindPort is ignored when Listener is set, will serve https even with 0.
 	BindPort int
-
-
+	Listener net.Listener
 }
 
 func NewSecureServingOptions() *SecureServingOptions {
