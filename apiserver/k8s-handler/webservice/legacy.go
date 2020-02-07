@@ -53,5 +53,5 @@ func (s *legacyRootAPIHandler) WebService() *restful.WebService {
 }
 
 func (s *legacyRootAPIHandler) handle(req *restful.Request, resp *restful.Response) {
-	io.WriteString(resp, "webService hanlder\n")
+	io.WriteString(resp, "GoRestfulContainer hanlder\n")
 }

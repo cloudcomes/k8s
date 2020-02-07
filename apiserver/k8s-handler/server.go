@@ -62,5 +62,6 @@ func DefaultBuildHandlerChain(apiHandler http.Handler) http.Handler {
 func main() {
 
 	http.Handle("/apis", InstallAPIGroups())
+	http.Handle("/", InstallAPIGroups())
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

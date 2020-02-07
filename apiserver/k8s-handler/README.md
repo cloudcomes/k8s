@@ -24,5 +24,8 @@ $ go build .
 $ ./k8s-handler 
 ```
 ### Access service
-make a request to http://localhost:8080,You should get output similar to this in IE:    
-APIServerHandler ServeHTTP---->WithPanicRecovery middleware---->Director ServeHTTP---->webService hanlder
+Make a request to http://localhost:8080/apis,You should get output similar to this in IE:    
+`APIServerHandler ServeHTTP---->WithPanicRecovery middleware---->Director ServeHTTP---->GoRestfulContainer hanlder `
+     
+Make a request to http://localhost:8080/,You should get output similar to this in IE:    
+`APIServerHandler ServeHTTP---->WithPanicRecovery middleware---->Director ServeHTTP---->nonGoRestfulMux ServeHTTP`
