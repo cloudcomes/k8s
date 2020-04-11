@@ -1,0 +1,125 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "metrics.alpha.kubernetes.io/custom-endpoints": "[{\"api\":\"\",\"path\":\"\",\"port\":\"\",\"names\":\"\"}]"
+        },
+        "creationTimestamp": "2020-02-22T00:50:31Z",
+        "generateName": "pause-84c8f75857-",
+        "labels": {
+            "app": "pause",
+            "pod-template-hash": "84c8f75857"
+        },
+        "name": "pause-84c8f75857-gl74t",
+        "namespace": "perf",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "pause-84c8f75857",
+                "uid": "5373b266-550d-11ea-bd3d-fa163e2fc473"
+            }
+        ],
+        "resourceVersion": "409821",
+        "selfLink": "/api/v1/namespaces/perf/pods/pause-84c8f75857-gl74t",
+        "uid": "5377383f-550d-11ea-bd3d-fa163e2fc473"
+    },
+    "spec": {
+        "affinity": {},
+        "containers": [
+            {
+                "env": [
+                    {
+                        "name": "PAAS_APP_NAME",
+                        "value": "pause"
+                    },
+                    {
+                        "name": "PAAS_NAMESPACE",
+                        "value": "perf"
+                    },
+                    {
+                        "name": "PAAS_PROJECT_ID",
+                        "value": "b57171eaafdf4c74bb42fb398c362b35"
+                    }
+                ],
+                "image": "mirrorgooglecontainers/pause:3.1",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "container-0",
+                "resources": {
+                    "limits": {
+                        "cpu": "250m",
+                        "memory": "512Mi"
+                    },
+                    "requests": {
+                        "cpu": "250m",
+                        "memory": "512Mi"
+                    }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6pwn2",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsConfig": {
+            "options": [
+                {
+                    "name": "single-request-reopen",
+                    "value": ""
+                },
+                {
+                    "name": "timeout",
+                    "value": "2"
+                }
+            ]
+        },
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "imagePullSecrets": [
+            {
+                "name": "default-secret"
+            }
+        ],
+        "nodeName": "192.168.0.109",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "name": "default-token-6pwn2",
+                "secret": {
+                    "defaultMode": 420,
+                    "secretName": "default-token-6pwn2"
+                }
+            }
+        ]
+    }
+
+}
+
