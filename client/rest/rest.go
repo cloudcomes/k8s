@@ -6,7 +6,7 @@ import (
 	"flag"
 	"fmt"
 	//"os"
-
+    "context"
 	"encoding/json"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -44,7 +44,7 @@ func testGet() {
 		Namespace("perf").
 		Resource("pods").
 		Name("netperf-655c567cf-fmw6v").
-		Do()
+		Do(context.Background())
 	bytes, err := result.Raw()
 	if err != nil {
 		fmt.Printf("%s: %sn", err.Error(), bytes)
