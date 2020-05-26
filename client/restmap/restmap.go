@@ -16,7 +16,6 @@ import (
 	mapper "k8s.io/client-go/restmapper"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
-	"k8s.io/kubectl/pkg/explain"
 	"log"
 	"path/filepath"
 	"regexp"
@@ -42,58 +41,23 @@ func RESTMapperK2R() {
 	gk := schema.GroupKind{Group: "", Kind: "Pod"}
 	gv := schema.GroupVersion{Group: "", Version: "v1"}
 
-	preferredVersions = append(preferredVersions, gv.Version)
+	gvr := schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "deployments"}
+	//gvk := schema.GroupVersionKind{Group: "app", Version: "v1", Kind: "Deployment"}
 
+	gvk1, _ := m.KindFor(gvr)
+	fmt.Println("gvk1 is: %v", gvk1)
+
+    gvr1,_ := m.ResourceFor(gvr)
+	fmt.Println("gvr1 is: %v", gvr1)
+
+
+	preferredVersions = append(preferredVersions, gv.Version)
 	mapping, _ := m.RESTMapping(gk, preferredVersions...)
+
 
 	fmt.Println("mapping is: %v", mapping)
 
 }
-
-
-// Run executes the appropriate steps to print a model's documentation
-func  RESTMapperR2K() error {
-	recursive := o.Recursive
-	apiVersionString := o.APIVersion
-
-	// TODO: After we figured out the new syntax to separate group and resource, allow
-	// the users to use it in explain (kubectl explain <group><syntax><resource>).
-	// Refer to issue #16039 for why we do this. Refer to PR #15808 that used "/" syntax.
-	inModel, fieldsPath, err := explain.SplitAndParseResourceRequest(args[0], o.Mapper)
-	if err != nil {
-		return err
-	}
-
-	// TODO: We should deduce the group for a resource by discovering the supported resources at server.
-	fullySpecifiedGVR, groupResource := schema.ParseResourceArg(inModel)
-	gvk := schema.GroupVersionKind{}
-	if fullySpecifiedGVR != nil {
-		gvk, _ = o.Mapper.KindFor(*fullySpecifiedGVR)
-	}
-	if gvk.Empty() {
-		gvk, err = o.Mapper.KindFor(groupResource.WithVersion(""))
-		if err != nil {
-			return err
-		}
-	}
-
-	if len(apiVersionString) != 0 {
-		apiVersion, err := schema.ParseGroupVersion(apiVersionString)
-		if err != nil {
-			return err
-		}
-		gvk = apiVersion.WithKind(gvk.Kind)
-	}
-
-	schema := o.Schema.LookupResource(gvk)
-	if schema == nil {
-		return fmt.Errorf("Couldn't find resource for %q", gvk)
-	}
-
-	return explain.PrintModelDescription(fieldsPath, o.Out, schema, gvk, recursive)
-}
-
-
 
 func TestRESTMapperRESTMappingSelectsVersion() {
 	expectedGroupVersion1 := schema.GroupVersion{Group: "tgroup", Version: "test1"}
