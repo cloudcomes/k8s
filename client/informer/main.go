@@ -156,7 +156,8 @@ func ExampleLW() {
 		Process: func(obj interface{}) error {
 			// Obj is from the Pop method of the Queue we make above.
 			newest := obj.(cache.Deltas).Newest()
-
+			//fmt.Printf("[%v] %v\n", newest.Object.(*api.Pod).Name, newest.Type)
+			fmt.Printf("[%v] %v\n", newest.Object, newest.Type)
 			if newest.Type != cache.Deleted {
 				// Update our downstream store.
 				err := downstream.Add(newest.Object)

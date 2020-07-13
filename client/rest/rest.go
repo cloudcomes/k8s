@@ -5,13 +5,15 @@ package main
 import (
 	"flag"
 	"fmt"
-	//"os"
-    "context"
-	"encoding/json"
 	v1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
+	//"os"
+	"context"
+	"encoding/json"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	//"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -19,10 +21,13 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"time"
+
+	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 )
 
 func main() {
-testGet()
+//testGet()
+TestWatch()
 //	testDiscovery()
 	//TestGetOpenAPISchema()
 }
@@ -41,9 +46,9 @@ func testGet() {
 	// /<namespace>/<resource>/<name>
 	// GET https://apiserver/api/v1/namespaces/perf/pods/netperf-655c567cf-fmw6v
 	result := restclient.Get().
-		Namespace("perf").
+		Namespace("default").
 		Resource("pods").
-		Name("netperf-655c567cf-fmw6v").
+		Name("gohttpdemo-5cb6954c5c-drrmg").
 		Do(context.Background())
 	bytes, err := result.Raw()
 	if err != nil {
@@ -52,6 +57,32 @@ func testGet() {
 		fmt.Printf("%sn", bytes)
 	}
 }
+
+func TestWatch() {
+
+	// RESTClientFor returns a RESTClient that satisfies the requested attributes on a client Config
+	// object. Note that a RESTClient may require fields that are optional when initializing a Client.
+	// A RESTClient created by this method is generic - it expects to operate on an API that follows
+	// the Kubernetes conventions, but may not be the Kubernetes API.
+	restclient, err := rest.RESTClientFor(getConfig())
+	if err != nil {
+		log.Fatalln(err)
+	}
+	// /<namespace>/<resource>/<name>
+	// GET https://apiserver/api/v1/namespaces/perf/pods/netperf-655c567cf-fmw6v
+	//r := restclient.Get().Prefix("watch/namespaces/default/pods/gohttpdemo-5cb6954c5c-drrmg")
+	r := restclient.Get().Prefix("watch/namespaces/default/pods")
+	s := r.URL().String();
+	result, _ := r.Watch(context.Background())
+
+	fmt.Printf("namespace should be in order in path: %s", s)
+
+	bytes, _ := <-result.ResultChan()
+	fmt.Printf("got %v", bytes)
+
+}
+
+
 
 func testDiscovery(){
 
@@ -111,7 +142,15 @@ func getConfig() (*rest.Config) {
 
 	spew.Dump(config, err)
 
+
 	scheme := runtime.NewScheme()
+
+	//unable to decode watch event: no kind \"Pod\" is registered for version \"v1\"
+	//we need mannually add the scheme: apis/apiextensions/v1beta1 like this:
+	//clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	//_ = clientgoscheme.AddToScheme(scheme)
+
+	_ = clientgoscheme.AddToScheme(scheme)
 
 	gv := v1.SchemeGroupVersion
 	config.GroupVersion = &gv
@@ -119,6 +158,8 @@ func getConfig() (*rest.Config) {
 	config.ContentType = runtime.ContentTypeJSON
 
 	config.NegotiatedSerializer = serializer.NewCodecFactory(scheme).WithoutConversion()
+
+
 	return config
 
 }

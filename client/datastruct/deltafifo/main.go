@@ -25,7 +25,8 @@ import (
 
 func main() {
 
-	TestDeltaFIFO_replaceWithDeleteDeltaIn()
+	//TestDeltaFIFO_replaceWithDeleteDeltaIn()
+	TestDeltaFIFO_basic()
 
 }
 
